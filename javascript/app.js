@@ -7,9 +7,7 @@ const toggle = document.getElementById("themeToggle")
 
 let chart
 
-/* ======================
-   TABLE RENDER
-====================== */
+
 function renderTable(data){
 
 table.innerHTML=""
@@ -32,9 +30,6 @@ table.appendChild(row)
 
 }
 
-/* ======================
-   FILTER
-====================== */
 filter.addEventListener("change", ()=>{
 
 const value = filter.value
@@ -52,9 +47,6 @@ updateChart(filtered)
 
 })
 
-/* ======================
-   CHART
-====================== */
 const ctx = document.getElementById("revenueChart")
 
 function updateChart(data){
@@ -91,17 +83,12 @@ y:{ticks:{color:"#94a3b8"}}
 
 }
 
-/* ======================
-   DARK MODE FIX (MAIN PART)
-====================== */
 
-// Load saved theme
 const savedTheme = localStorage.getItem("theme")
 if(savedTheme){
 document.documentElement.setAttribute("data-theme", savedTheme)
 }
 
-// Button click
 toggle.addEventListener("click", ()=>{
 
 let current = document.documentElement.getAttribute("data-theme")
@@ -118,8 +105,5 @@ toggle.innerText = "☀️"
 
 })
 
-/* ======================
-   INIT
-====================== */
 renderTable(mockDashboardData)
 updateChart(mockDashboardData)
