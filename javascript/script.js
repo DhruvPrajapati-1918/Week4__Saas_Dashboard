@@ -1,7 +1,7 @@
 
 const toggle = document.getElementById("themeToggle")
 
-// load saved theme
+
 const savedTheme = localStorage.getItem("theme")
 if(savedTheme){
 document.documentElement.setAttribute("data-theme", savedTheme)
