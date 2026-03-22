@@ -5,7 +5,7 @@ color:white;
 margin:0;
 }
 
-/* LAYOUT */
+
 
 .dashboard{
 display:grid;
@@ -13,7 +13,7 @@ grid-template-columns:240px 1fr;
 min-height:100vh;
 }
 
-/* SIDEBAR */
+
 
 .sidebar{
 background:#020617;
@@ -43,7 +43,7 @@ background:#022c22;
 color:#22c55e;
 }
 
-/* MAIN */
+
 
 .main{
 padding:25px 30px;
@@ -52,7 +52,6 @@ max-width:1200px;
 margin:0 auto;
 }
 
-/* TOPBAR */
 
 .topbar{
 display:flex;
@@ -69,7 +68,6 @@ background:#1e293b;
 color:white;
 }
 
-/* ✅ NEW: USER SECTION FIX (spacing perfect) */
 .user{
 display:flex;
 align-items:center;
@@ -80,7 +78,6 @@ gap:12px;   /* ⭐ spacing between button & image */
 border-radius:50%;
 }
 
-/* CARDS */
 
 .cards{
 display:grid;
@@ -95,7 +92,7 @@ padding:20px;
 border-radius:12px;
 }
 
-/* CHART */
+
 
 .chart-container{
 background:#1e293b;
@@ -115,7 +112,6 @@ width:100% !important;
 height:100% !important;
 }
 
-/* TABLE */
 
 .table-container{
 background:#1e293b;
@@ -143,7 +139,7 @@ tr{
 border-bottom:1px solid #334155;
 }
 
-/* STATUS BADGES */
+
 
 .status{
 padding:5px 12px;
@@ -168,7 +164,7 @@ background:rgba(239,68,68,0.15);
 color:#ef4444;
 }
 
-/* MOBILE */
+
 
 @media(max-width:768px){
 
@@ -190,7 +186,6 @@ height:280px;
 
 }
 
-/* MOBILE MAIN FIX */
 
 @media(max-width:768px){
 
@@ -202,7 +197,7 @@ margin:0;
 
 }
 
-/* FILTER + BUTTON */
+
 
 #statusFilter{
 padding:8px;
@@ -213,7 +208,7 @@ border:none;
 margin-left:10px;
 }
 
-/* ✅ UPDATED BUTTON (slightly better look) */
+
 #themeToggle{
 padding:8px 12px;
 border:none;
@@ -223,7 +218,7 @@ color:white;
 cursor:pointer;
 }
 
-/* LIGHT MODE */
+
 
 [data-theme="light"]{
 background:#f1f5f9;
@@ -257,7 +252,6 @@ background:#f1f5f9;
 background:#f1f5f9;
 }
 
-/* MOBILE TOPBAR FIX */
 
 @media(max-width:768px){
 
