@@ -1,109 +1,149 @@
+import { mockDashboardData } from "./data.js";
 
-import { mockDashboardData } from "./data.js"
+window.onload = () => {
 
-const table = document.getElementById("tableData")
-const filter = document.getElementById("statusFilter")
-const toggle = document.getElementById("themeToggle")
+  const menuToggle = document.getElementById("menu-toggle");
+const sidebar = document.querySelector(".sidebar");
 
-let chart
-
-
-function renderTable(data){
-
-table.innerHTML=""
-
-data.forEach(user=>{
-
-const row=document.createElement("tr")
-
-row.innerHTML=`
-<td>${user.name}</td>
-<td>${user.email}</td>
-<td>$${user.revenue.toLocaleString()}</td>
-<td><span class="status ${user.status.toLowerCase()}">${user.status}</span></td>
-<td>${user.lastLogin}</td>
-`
-
-table.appendChild(row)
-
-})
-
-}
-
-filter.addEventListener("change", ()=>{
-
-const value = filter.value
-
-let filtered = mockDashboardData
-
-if(value !== "all"){
-filtered = mockDashboardData.filter(
-u => u.status.toLowerCase() === value
-)
-}
-
-renderTable(filtered)
-updateChart(filtered)
-
-})
-
-const ctx = document.getElementById("revenueChart")
-
-function updateChart(data){
-
-const labels = data.map(u=>u.name)
-const revenue = data.map(u=>u.revenue)
-
-if(chart){
-chart.destroy()
-}
-
-chart = new Chart(ctx,{
-type:"line",
-data:{
-labels,
-datasets:[{
-data:revenue,
-borderColor:"#3b82f6",
-backgroundColor:"rgba(59,130,246,0.2)",
-fill:true,
-tension:0.4
-}]
-},
-options:{
-responsive:true,
-maintainAspectRatio:false,
-plugins:{legend:{display:false}},
-scales:{
-x:{ticks:{color:"#94a3b8"}},
-y:{ticks:{color:"#94a3b8"}}
-}
-}
-})
-
-}
+menuToggle.addEventListener("click", () => {
+  sidebar.classList.toggle("active");
+});
 
 
-const savedTheme = localStorage.getItem("theme")
-if(savedTheme){
-document.documentElement.setAttribute("data-theme", savedTheme)
-}
+document.addEventListener("click", (e) => {
+  if (
+    sidebar.classList.contains("active") &&
+    !sidebar.contains(e.target) &&
+    !menuToggle.contains(e.target)
+  ) {
+    sidebar.classList.remove("active");
+  }
+});
+  const tbody = document.getElementById("table-body");
+  const searchInput = document.getElementById("search-input");
+  const filter = document.getElementById("status-filter");
+  const toggleBtn = document.getElementById("theme-toggle");
 
-toggle.addEventListener("click", ()=>{
+  
+  function renderTable(data) {
+    if (!tbody) return;
 
-let current = document.documentElement.getAttribute("data-theme")
+    tbody.innerHTML = data.map(user => `
+      <tr>
+        <td>${user.id}</td>
+        <td>${user.name}</td>
+        <td>${user.email}</td>
+        <td>$${user.revenue.toFixed(2)}</td>
+        <td class="status status-${user.status.toLowerCase()}">${user.status}</td>
+        <td>${user.lastLogin}</td>
+      </tr>
+    `).join("");
+  }
 
-if(current === "light"){
-document.documentElement.setAttribute("data-theme","dark")
-localStorage.setItem("theme","dark")
-toggle.innerText = "🌙"
-}else{
-document.documentElement.setAttribute("data-theme","light")
-localStorage.setItem("theme","light")
-toggle.innerText = "☀️"
-}
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      const value = e.target.value.toLowerCase();
 
-})
+      const filtered = mockDashboardData.filter(user =>
+        user.name.toLowerCase().includes(value) ||
+        user.email.toLowerCase().includes(value)
+      );
 
-renderTable(mockDashboardData)
-updateChart(mockDashboardData)
+      renderTable(filtered);
+    });
+  }
+  if (filter) {
+    filter.addEventListener("change", (e) => {
+      const value = e.target.value.toLowerCase();
+
+      if (value === "all") {
+        renderTable(mockDashboardData);
+      } else {
+        const filtered = mockDashboardData.filter(user =>
+          user.status.toLowerCase() === value
+        );
+
+        renderTable(filtered);
+      }
+    });
+  }
+
+
+  function initTheme() {
+    const savedTheme = localStorage.getItem("theme") || "light";
+    document.documentElement.setAttribute("data-theme", savedTheme);
+    updateIcon();
+  }
+
+  function toggleTheme() {
+    const current = document.documentElement.getAttribute("data-theme");
+    const newTheme = current === "dark" ? "light" : "dark";
+
+    document.documentElement.setAttribute("data-theme", newTheme);
+    localStorage.setItem("theme", newTheme);
+
+    updateIcon();
+  }
+
+  function updateIcon() {
+    if (!toggleBtn) return;
+
+    const theme = document.documentElement.getAttribute("data-theme");
+    toggleBtn.textContent = theme === "dark" ? "☀️" : "🌙";
+  }
+
+  if (toggleBtn) {
+    toggleBtn.addEventListener("click", toggleTheme);
+  }
+
+  initTheme();
+
+  function createCharts() {
+    const labels = mockDashboardData.map(u => u.name);
+    const values = mockDashboardData.map(u => u.revenue);
+
+    const barCanvas = document.getElementById("barChart");
+    if (barCanvas) {
+      new Chart(barCanvas, {
+        type: "bar",
+        data: {
+          labels,
+          datasets: [{
+            label: "Revenue",
+            data: values,
+            backgroundColor: "#3b82f6"
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false
+        }
+      });
+    }
+
+    const lineCanvas = document.getElementById("lineChart");
+    if (lineCanvas) {
+      new Chart(lineCanvas, {
+        type: "line",
+        data: {
+          labels,
+          datasets: [{
+            label: "Growth",
+            data: values,
+            borderColor: "#22c55e",
+            fill: false,
+            tension: 0.3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false
+        }
+      });
+    }
+  }
+
+  renderTable(mockDashboardData);
+  createCharts();
+
+};
